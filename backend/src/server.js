@@ -1,12 +1,21 @@
 import express from "express";
+import {serve} from "inngest/express"
 
 import path from "path";
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
+import cors from "cors"
 
 const app = express();
 
 const __dirname = path.resolve();
+
+//middleware
+app.use(express.json())
+//crediential:true meaning=> server allows a brwoser to inclue cookies on request
+app.use(cors({origin:ENV.CLIENT_URL,credentials:true}))
+
+app.use("/api/inngest",serve({client:inngest}))
 
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running." });
