@@ -2,6 +2,7 @@ import express from "express";
 import { serve } from "inngest/express";
 import { inngest, functions } from "./lib/inngest.js";
 import {clerkMiddleware} from "@clerk/express";
+import sessionRoutes from "./routes/sessionRoutes.js";
 
 import path from "path";
 import { ENV } from "./lib/env.js";
@@ -24,6 +25,7 @@ app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use(clerkMiddleware());
 app.use("/api/chat",chatRoutes)
+app.use("/api/sessions",sessionRoutes)
 
 app.get("/health", (req, res) => {
   
