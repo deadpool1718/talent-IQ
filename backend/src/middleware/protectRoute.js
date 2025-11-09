@@ -7,10 +7,10 @@ export const protectRoute = [
     try {
       const clerkId = req.auth().userId;
       if (!clerkId)
-        return res.status(401).json({ msg: "Unauthorized. Invalid Token." });
+        return res.status(401).json({ message: "Unauthorized. Invalid Token." });
 
       const user = await User.findOne({ clerkId });
-      if (!user) return res.status(404).json({ msg: "user not found." });
+      if (!user) return res.status(404).json({ message: "user not found." });
 
       req.user = user;
       next();
