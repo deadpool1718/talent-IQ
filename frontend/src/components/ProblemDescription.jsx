@@ -30,9 +30,7 @@ function ProblemDescription({
             id=""
             className="select select-sm w-full"
             value={currentProblemId}
-            onChange={(e) => {
-              e.target.value;
-            }}
+            onChange={(e) => onProblemChange(e.target.value)}
           >
             {allProblems.map((p) => (
               <option key={p.id} value={p.id}>
