@@ -10,17 +10,23 @@ const sessionSchema = new mongoose.Schema(
       type: String,
       enum: ["Easy", "Medium", "Hard"],
       required: true,
+      set: (value) => {
+        // Normalize difficulty to capitalized form (Easy, Medium, Hard)
+        if (!value) return value;
+        return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+      },
     },
     host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    participants: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: [],
-    },
+    participants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     status: {
       type: String,
       enum: ["active", "completed"],
@@ -31,7 +37,7 @@ const sessionSchema = new mongoose.Schema(
       default: "",
     },
   },
-  { timeseries: true }
+  { timestamps: true }
 );
 
 const Session = mongoose.model("Session", sessionSchema);
