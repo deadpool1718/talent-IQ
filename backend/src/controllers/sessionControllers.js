@@ -1,4 +1,4 @@
-import { chatClient } from "../lib/stream.js";
+import { chatClient, streamClient } from "../lib/stream.js";
 import Session from "../models/Session.js";
 
 export async function createSession(req, res) {
@@ -31,7 +31,7 @@ export async function createSession(req, res) {
       },
     });
 
-    chatClient.channel("messaging", callId, {
+    const channel = chatClient.channel("messaging", callId, {
       name: `${problem} Session`,
       created_by_id: clerkId,
       members: [clerkId],
@@ -45,13 +45,9 @@ export async function createSession(req, res) {
 }
 export async function getActiveSessions(req, res) {
   try {
-    const sessions = (
-      await Session.find({ status: "active" }).populate(
-        "host",
-        "name profileImage email clerkId"
-      )
-    )
-      .toSorted({ createdAt: -1 })
+    const sessions = await Session.find({ status: "active" })
+      .populate("host", "name profileImage email clerkId")
+      .sort({ createdAt: -1 })
       .limit(20);
 
     res.status(200).json({ sessions });

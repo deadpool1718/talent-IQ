@@ -40,7 +40,18 @@ function ProblemPage() {
     setOutput(null);
   };
 
-  const handleProblemChange = (newProblemId) => navigate(`/problems/${newProblemId}`);
+  const handleProblemChange = (newProblemId) => {
+    if (!newProblemId || !PROBLEMS[newProblemId]) return;
+    // update local state immediately so UI updates without waiting for route change
+    setCurrentProblemId(newProblemId);
+    setCode(
+      PROBLEMS[newProblemId].starterCode[selectedLanguage] ||
+        PROBLEMS[newProblemId].starterCode.javascript
+    );
+    setOutput(null);
+    // update URL
+    navigate(`/problems/${newProblemId}`);
+  };
 
   const triggerConfetti = () => {
     confetti({
